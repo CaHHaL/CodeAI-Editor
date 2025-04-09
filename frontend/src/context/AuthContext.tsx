@@ -15,6 +15,8 @@ interface AuthContextType {
   logout: () => void;
 }
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -31,9 +33,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (username: string, password: string) => {
     try {
       setError(null);
-      const response = await axios.post('http://localhost:5000/auth/login', {
+      const response = await axios.post(`${API_URL}/auth/login`, {
         username,
         password,
+      }, {
+        withCredentials: true // Enable sending cookies
       });
       const userData = response.data;
       setUser(userData);
@@ -47,9 +51,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (username: string, password: string) => {
     try {
       setError(null);
-      const response = await axios.post('http://localhost:5000/auth/register', {
+      const response = await axios.post(`${API_URL}/auth/register`, {
         username,
         password,
+      }, {
+        withCredentials: true // Enable sending cookies
       });
       const userData = response.data;
       setUser(userData);

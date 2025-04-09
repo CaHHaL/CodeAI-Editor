@@ -33,7 +33,7 @@ if (process.env.NODE_ENV !== 'production') {
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: ['https://your-frontend-url.onrender.com', 'http://localhost:3000'],
+  origin: ['https://code-debugger-frontend.onrender.com', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(express.json());
