@@ -32,7 +32,10 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: ['https://your-frontend-url.onrender.com', 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(morgan('combined'));
 
