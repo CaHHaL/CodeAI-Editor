@@ -6,7 +6,7 @@ class GeminiService {
       throw new Error('GEMINI_API_KEY is not set in environment variables');
     }
     this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    this.model = this.genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+    this.model = this.genAI.getGenerativeModel({ model: "gemini-pro" });
   }
 
   async generateContent(prompt) {
@@ -16,7 +16,13 @@ class GeminiService {
       return response.text();
     } catch (error) {
       console.error('Error in generateContent:', error);
-      throw new Error('Failed to generate content: ' + error.message);
+      if (error.message.includes('API key')) {
+        throw new Error('Invalid or missing Gemini API key');
+      } else if (error.message.includes('quota')) {
+        throw new Error('Gemini API quota exceeded');
+      } else {
+        throw new Error('Failed to generate content: ' + error.message);
+      }
     }
   }
 

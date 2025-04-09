@@ -6,6 +6,8 @@ import axios from 'axios';
 import { PlayArrow, ContentCopy, Delete, BugReport, Code, Logout } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const languages = [
   'javascript',
   'python',
@@ -88,13 +90,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     try {
       setLoading(true);
       setError('');
-      const response = await axios.post('http://localhost:5000/api/debug', {
+      const response = await axios.post(`${API_URL}/api/debug`, {
         code,
         language
+      }, {
+        withCredentials: true
       });
       setResult(response.data.result);
-    } catch (err) {
-      setError('Failed to debug code. Please try again.');
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to debug code. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -105,13 +109,15 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
     try {
       setLoading(true);
       setError('');
-      const response = await axios.post('http://localhost:5000/api/generate', {
+      const response = await axios.post(`${API_URL}/api/generate`, {
         description: code,
         language
+      }, {
+        withCredentials: true
       });
       setResult(response.data.result);
-    } catch (err) {
-      setError('Failed to generate code. Please try again.');
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Failed to generate code. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
@@ -123,9 +129,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       setLoading(true);
       setError('');
 
-      const response = await axios.post('http://localhost:5000/api/execute', {
+      const response = await axios.post(`${API_URL}/api/execute`, {
         code,
         language
+      }, {
+        withCredentials: true
       });
 
       if (response.data.error) {
